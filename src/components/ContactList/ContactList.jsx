@@ -1,45 +1,33 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styles from "./ContactList.module.css";
+import React from 'react';
+import styles from './ContactList.module.css';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getContacts, removeContact } from '../../redux/ContactsSlice';
+import { fetchContacts } from '../../redux/operations';
+import { getContacts } from '../../redux/ContactsSlice';
 import { getFilter } from '../../redux/filtersSlice';
+import { ContactItem } from '../ContactItem/ContactItem';
 
 export const ContactList = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
+  const { items } = useSelector(getContacts);
   const filters = useSelector(getFilter);
-  
-  const normalizedFilter = filters.toLowerCase();
-  const getVisibleContacts = contacts.filter(({ name }) =>
-  name.toLowerCase().includes(normalizedFilter)
-);
-  return(
-  <ul className={styles.TaskList}>
-    {getVisibleContacts.map((contact) => (
-      <li className = {styles.TaskList_item}key={contact.id}>
-        {contact.name + ":" + contact.number}
-        {
-          <button
-            className={styles.TaskList_button}
-            type="button"
-            name="delte"
-            onClick={() => dispatch(removeContact(contact.id))}
-          >
-            Delete
-          </button>
-        }
-      </li>
-    ))}
-  </ul>
-);
-}
 
-ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-  })),
-}
-export default ContactList;
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
+  const normalizedFilter = filters.toLowerCase();
+  const getVisibleContacts = items.filter(({ name }) =>
+    name.toLowerCase().includes(normalizedFilter)
+  );
+  return (
+    <ul className={styles.TaskList}>
+      {getVisibleContacts.map(({ id, name, number }) => (
+        <li className={styles.TaskList_item} key={id}>
+          {/* <div>{isLoading && 'Request in progress...'}</div> */}
+          <ContactItem id={id} name={name} number={number} />
+        </li>
+      ))}
+    </ul>
+  );
+};
