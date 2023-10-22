@@ -1,7 +1,7 @@
 import { Button } from './Button';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getContacts } from '../redux/ContactsSlice';
+import {selectContacts } from '../redux/selectors';
 import { addContact } from '../redux/operations';
 
 export function Form() {
@@ -9,7 +9,7 @@ export function Form() {
   const [number, setNumber] = useState('');
 
   const dispatch = useDispatch();
-  const { items } = useSelector(getContacts);
+  const  items  = useSelector(selectContacts);
 
   const handleInput = evt => {
     setName(evt.target.value);
@@ -31,13 +31,7 @@ export function Form() {
     } else if (name.length === 0) {
       alert('Fields must be filled!');
     } else {
-      // console.log({ name, number });
       dispatch(addContact({ name, number }));
-      // const contact = {
-      //   ...data,
-      //   id: nanoid(),
-      // };
-      // setContacts(prevState => [...prevState, contact]);
     }
     reset();
   };

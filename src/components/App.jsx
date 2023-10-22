@@ -2,19 +2,19 @@ import { Form } from './Form';
 import { Filter } from './Filter/Filter';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchContacts } from '../redux/operations';
-import { getContacts } from '../redux/ContactsSlice';
+import { selectVisibleContacts, selectLoading, selectError } from '../redux/selectors';
 import { useEffect } from 'react';
 import { ContactList } from './ContactList/ContactList';
 
-// const { ContactList } = lazy(() => import('./ContactList/ContactList'));
-
 export function App() {
   const dispatch = useDispatch();
-  const { items, isLoading, error } = useSelector(getContacts);
+  const items = useSelector(selectVisibleContacts);
+  const isLoading = useSelector(selectLoading);
+  const  error = useSelector(selectError);
+
   console.log(items);
   useEffect(() => {
     dispatch(fetchContacts());
-    console.log(dispatch);
   }, [dispatch]);
 
   return (
