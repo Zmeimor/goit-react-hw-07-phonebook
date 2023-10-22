@@ -1,8 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-// import { nanoid } from 'nanoid';
 import { fetchContacts, addContact, deleteContact } from './operations';
-// import persistReducer from 'redux-persist/es/persistReducer';
-// import storage from 'redux-persist/lib/storage';
 
 const handlePending = state => {
   state.isLoading = true;
@@ -32,7 +29,6 @@ const ContactsSlice = createSlice({
       state.isLoading = false;
       state.error = null;
       state.items = action.payload;
-      console.log(state.items);
     },
     [addContact.fulfilled](state, action) {
       state.isLoading = false;
